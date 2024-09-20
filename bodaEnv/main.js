@@ -39,12 +39,12 @@ let jsCode = staticCode + getRunAllCode
 const script = new VMScript(jsCode, "./debugJS.js")
 let result = vm.run(script);
 let testNum=0
-    function run_rsvmp(boUrl,_reqhtml,apiUrl) {
+    function main(_reqhtml) {
         // configFormChrome 去浏览器复制一下,记得把cookie删了
         //获取前缀,getResult文件下把这个打开就行'rsurl':bodaEnv.toolsFunc.getApi(bodaConifg['apiUrl'])
         // listenerOpen 打开后 调用load事件 asyncListener文件夹下
         // 运行时候,把run_rs.html,run_rs.js 改为run.html,run.js
-        let website_ = boUrl//atob('aHR0cDovL3d3dy5ubXBhLmdvdi5jbg==')
+        let website_ = ''//网站url
         let bohtml =''
         if (!_reqhtml){
             bohtml= fs.readFileSync(path.join(__dirname , 'run','run.html'), 'utf8').toString();
@@ -55,12 +55,11 @@ let testNum=0
         // console.log(bohtml)
         let dominoWindow = domino.createWindow(bohtml, website_)
         let bodaConifg = {
-            'log': false, //开启日志
+            'log': true, //开启日志
             'listenerOpen':true, 
             'SetTimeOutOpen': false, //开启定时器事件,
             'userAgent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.69 Safari/537.36',
             'ip_addr':'192.168.2.2', //ip RTC检测
-            'apiUrl':apiUrl
         }
 
         vm.setGlobal('bodadominoWindow', dominoWindow)
@@ -73,21 +72,5 @@ let testNum=0
     }
 
 
-      app.get('/cookie', (req, res) => {
-        /*
-        boHtml: 请求返回的html页面  
-        apiUrl: 接口url
-        rs 不需要用run.js 文件
-        在run/website/ 底下按照我提供的例子,放js文件
-        */
-        // debugger
-        let boUrl=req.query['boUrl']
-        let boHtml=atob(req.query['boHtml'])
-        let apiUrl=req.query['apiUrl']
-        // debugger
-        let result_=run_rsvmp(boUrl,boHtml,apiUrl)
-        res.send(result_)
-      });
-      app.listen(3021, () => {
-        console.log('监听端口3021');
-      })
+main()
+
